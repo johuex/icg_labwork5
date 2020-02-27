@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/icg-course/icg_labwork5.svg?branch=gh-pages)](https://travis-ci.org/icg-course/icg_labwork5)
+[![Build Status](https://travis-ci.com/icg-course/icg_labwork5.svg?branch=gh-pages)](https://travis-ci.com/icg-course/icg_labwork5)
 # Репозиторий лабораторной работы №5 (Интерактивность и нелинейная анимация)
 
 Данный репозиторий предназначен для выполнения и сдачи лабораторной работы №5.
