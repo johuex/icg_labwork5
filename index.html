@@ -3,12 +3,12 @@
   <head>  
     <meta charset="utf-8" />
     <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><![endif]-->
-    <title>Лабораторная работа 4</title>
+    <title>Лабораторная работа 5</title>
     <link rel="stylesheet" href="https://www.x3dom.org/download/x3dom.css" />
     <script src="https://www.x3dom.org/release/x3dom-full.js"></script>
   </head>
   <body>
-    <h1>Беседка в поле</h1>
+    <h1>Беседка в поле Рыба в ведре</h1>
     <X3D>
       <Scene>
         <DirectionalLight id="directional" direction='1 0 -1' on ="TRUE" intensity='0.8' shadowIntensity='0.6'> </DirectionalLight> 
@@ -147,17 +147,21 @@
             <Group USE = "Tabl"></Group>
           </Transform>
 
-          <!--точки наблюдения-->
-          <Viewpoint id="front" position="0 8 -20" orientation="0 1 0 3.15833" description="camera"></Viewpoint> 
+          <!--точки наблюдения--> 
           <Viewpoint id="right" position="-2 5 30" orientation="0 0.5 0 6" description="camera"></Viewpoint>
           <Viewpoint id="right" position="2 5 30" orientation="0 0.5 0 6.6" description="camera"></Viewpoint>
-					<Viewpoint id="near" position="0 50 0" orientation="0 1 1 3.15833" description="camera"></Viewpoint> 
+		  <Viewpoint id="front" position="0 8 -20" orientation="0 1 0 3.15833" description="camera"></Viewpoint>
+		  <Viewpoint id="near" position="0 50 0" orientation="0 1 1 3.15833" description="camera"></Viewpoint> 
         </Transform>
 
         <!--далее будут созданы сложные объекты-->
         <!--встроенное ведро с водой-->
-        <Transform translation = "0 -4.9 0">
+        <Transform scale = "3 2 3" translation = "0 -4.9 5">
           <Inline url = 'vedro.x3d' load = 'true'></Inline>
+        </Transform>
+		<!--рыба-->
+		<Transform scale="0.1 0.1 0.1" translation = "0 -4 -5" DEF="fish" id = "fish">
+          <Inline url = 'fish.x3d' load = 'true'></Inline>
         </Transform>
         <!--самолетик бумажный с гиперссылкой-->
         <Anchor url = "https://github.com/johuex">
@@ -173,7 +177,7 @@
           </Transform>
         </Anchor>
 		
-		<!--описание таймера-->
+		<!--для анимации самолета-->
 		<timeSensor DEF="time" cycleInterval="5" loop="true" enabled="true">
 		</timeSensor>
 		
@@ -184,7 +188,7 @@
    
 		<PositionInterpolator DEF="moving" 
 			key="0 0.125 0.25 0.375 0.5 0.625 0.75 0.875 1" 
-			keyValue="0 0 -5, -2.5 0 -2.5, -5 0 0, -2.5 0 2.5, 0 0 5, 2.5 0 2.5, 5 0 0, 2.5 0 -2.5, 0 0 -5 "> 
+			keyValue="0 2 -5, -2.5 2 -2.5, -5 2 0, -2.5 2 2.5, 0 2 5, 2.5 2 2.5, 5 2 0, 2.5 2 -2.5, 0 2 -5 "> 
 		</PositionInterpolator> 
 		
 		<Route fromNode="time" fromField ="fraction_changed" toNode="rotate" toField="set_fraction">
@@ -194,7 +198,31 @@
 		
 		<Route fromNode="rotate" fromField ="value_changed" toNode="fly" toField="set_rotation">
 		</Route>
-		<Route fromNode="moving" fromField ="value_changed" toNode="fly" toField="translation">
+		<Route fromNode="moving" fromField ="value_changed" toNode="fly" toField="set_translation">
+		</Route>
+		
+		<!--для анимации рыбы-->
+		<timeSensor DEF="fish_time" id = "fish_time" cycleInterval="2" loop="true" enabled="true">
+		</timeSensor>
+		
+		<PositionInterpolator DEF="fish_moving"
+			key="0 0.25 0.5 0.75 1" 
+			keyValue="-2 -4 3, -2 -1 4, -2 1 5, -2 -1 6, -2 -4 7"
+		></PositionInterpolator> 
+   
+		<OrientationInterpolator DEF="fish_rotate" 
+			key="0 0.25 0.5 0.75 1" 
+			keyValue="1 0 0 -1.57, 1 0 0 -0.57, 1 0 0 0, 1 0 0 0.57, 1 0 0 1.57"> 
+		</OrientationInterpolator> 
+		
+		<Route fromNode="fish_time" fromField ="fraction_changed" toNode="fish_rotate" toField="set_fraction">
+		</Route>
+		<Route fromNode="fish_time" fromField ="fraction_changed" toNode="fish_moving" toField="set_fraction">
+		</Route>
+		
+		<Route fromNode="fish_rotate" fromField ="value_changed" toNode="fish" toField="set_rotation">
+		</Route>
+		<Route fromNode="fish_moving" fromField ="value_changed" toNode="fish" toField="set_translation">
 		</Route>
 		
         <Background DEF='Summer'
@@ -216,7 +244,7 @@
                         0.53604 0.605546 0.542,
                         0.5612 0.669145 0.602,
                         0.59471 0.622059 0.669'/>
-        <Fog color = "1 1 1" fogType = "EXPONENTIAL" visibilityRange = "60"></Fog>
+        <Fog color = "1 1 1" fogType = "EXPONENTIAL" visibilityRange = "85"></Fog>
         
       </Scene>
     </X3D>

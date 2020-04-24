@@ -1,5 +1,5 @@
   <Scene>
-    <Transform rotation = "0 1 0 1.57">
+    <Transform>
       <Shape>
         <Appearance>
           <Material diffuseColor='1 1 1'/>
