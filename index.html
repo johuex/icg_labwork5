@@ -6,9 +6,30 @@
     <title>Лабораторная работа 5</title>
     <link rel="stylesheet" href="https://www.x3dom.org/download/x3dom.css" />
     <script src="https://www.x3dom.org/release/x3dom-full.js"></script>
+	<script>
+		function jump()
+		{
+			var Enable = fish_time.getAttribute("enabled");
+            if (Enable == "true") 
+              {  
+				var ET = fish_time.getAttribute("elapsedTime");
+				var  time = fish_time.getAttribute("elapsedTime");
+                fish_time.setAttribute("pauseTime", time-ET); 
+                fish_time.setAttribute("enabled", "false");
+                button.value = "Рыба прыгай";
+              }
+            else 
+              {     
+				fish_time.setAttribute("pauseTime", 0);     
+                fish_time.setAttribute("enabled", "true");
+                button.value = "Рыба не прыгай";
+              }
+		}
+	</script>
   </head>
   <body>
     <h1>Беседка в поле Рыба в ведре</h1>
+	<input id="button" type="button" style="  display: block; margin-left: auto; margin-right: auto;" value="Рыба не прыгай" onclick="jump();" />
     <X3D>
       <Scene>
         <DirectionalLight id="directional" direction='1 0 -1' on ="TRUE" intensity='0.8' shadowIntensity='0.6'> </DirectionalLight> 
@@ -160,7 +181,7 @@
           <Inline url = 'vedro.x3d' load = 'true'></Inline>
         </Transform>
 		<!--рыба-->
-		<Transform scale="0.1 0.1 0.1" translation = "0 -4 -5" DEF="fish" id = "fish">
+		<Transform scale="0.1 0.1 0.1" translation = "-2 -4 3" DEF="fish" id = "fish">
           <Inline url = 'fish.x3d' load = 'true'></Inline>
         </Transform>
         <!--самолетик бумажный с гиперссылкой-->
@@ -185,20 +206,27 @@
 			key="0 0.125 0.25 0.375 0.5 0.625 0.75 0.875 1" 
 			keyValue="0 1 0 0.78, 0 1 0 1.57, 0 1 0 2.35, 0 1 0 3.14, 0 1 0 3.92, 0 1 0 4.71, 0 1 0 5.49, 0 1 0 6.1, 0 1 0 6.4"
 		></OrientationInterpolator> 
-   
+		<OrientationChaser DEF="OrCh1" duration="1"></PositionChaser>
+		
 		<PositionInterpolator DEF="moving" 
 			key="0 0.125 0.25 0.375 0.5 0.625 0.75 0.875 1" 
 			keyValue="0 2 -5, -2.5 2 -2.5, -5 2 0, -2.5 2 2.5, 0 2 5, 2.5 2 2.5, 5 2 0, 2.5 2 -2.5, 0 2 -5 "> 
 		</PositionInterpolator> 
+		<PositionChaser DEF="PosCh1" duration="1"></PositionChaser>
 		
 		<Route fromNode="time" fromField ="fraction_changed" toNode="rotate" toField="set_fraction">
 		</Route>
 		<Route fromNode="time" fromField ="fraction_changed" toNode="moving" toField="set_fraction">
 		</Route>
 		
-		<Route fromNode="rotate" fromField ="value_changed" toNode="fly" toField="set_rotation">
+		<Route fromNode="rotate" fromField ="value_changed" toNode="OrCh1" toField="set_destination">
 		</Route>
-		<Route fromNode="moving" fromField ="value_changed" toNode="fly" toField="set_translation">
+		<Route fromNode="moving" fromField ="value_changed" toNode="PosCh1" toField="set_destination">
+		</Route>
+		
+		<Route fromNode="OrCh1" fromField ="value_changed" toNode="fly" toField="set_rotation">
+		</Route>
+		<Route fromNode="PosCh1" fromField ="value_changed" toNode="fly" toField="set_translation">
 		</Route>
 		
 		<!--для анимации рыбы-->
@@ -209,20 +237,27 @@
 			key="0 0.25 0.5 0.75 1" 
 			keyValue="-2 -4 3, -2 -1 4, -2 1 5, -2 -1 6, -2 -4 7"
 		></PositionInterpolator> 
-   
+		<PositionChaser DEF="PosCh" duration="1" set_value = "-2 -4 3"></PositionChaser>
+		
 		<OrientationInterpolator DEF="fish_rotate" 
 			key="0 0.25 0.5 0.75 1" 
 			keyValue="1 0 0 -1.57, 1 0 0 -0.57, 1 0 0 0, 1 0 0 0.57, 1 0 0 1.57"> 
 		</OrientationInterpolator> 
+		<OrientationChaser DEF="OrCh" duration="1" set_value = "1 0 0 -1.57"></PositionChaser>
 		
 		<Route fromNode="fish_time" fromField ="fraction_changed" toNode="fish_rotate" toField="set_fraction">
 		</Route>
 		<Route fromNode="fish_time" fromField ="fraction_changed" toNode="fish_moving" toField="set_fraction">
 		</Route>
 		
-		<Route fromNode="fish_rotate" fromField ="value_changed" toNode="fish" toField="set_rotation">
+		<Route fromNode="fish_rotate" fromField ="value_changed" toNode="OrCh" toField="set_destination">
 		</Route>
-		<Route fromNode="fish_moving" fromField ="value_changed" toNode="fish" toField="set_translation">
+		<Route fromNode="fish_moving" fromField ="value_changed" toNode="PosCh" toField="set_destination">
+		</Route>
+		
+		<Route fromNode="OrCh" fromField ="value_changed" toNode="fish" toField="set_rotation">
+		</Route>
+		<Route fromNode="PosCh" fromField ="value_changed" toNode="fish" toField="set_translation">
 		</Route>
 		
         <Background DEF='Summer'
