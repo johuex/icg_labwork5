@@ -206,7 +206,7 @@
 			key="0 0.125 0.25 0.375 0.5 0.625 0.75 0.875 1" 
 			keyValue="0 1 0 0.78, 0 1 0 1.57, 0 1 0 2.35, 0 1 0 3.14, 0 1 0 3.92, 0 1 0 4.71, 0 1 0 5.49, 0 1 0 6.1, 0 1 0 6.4"
 		></OrientationInterpolator> 
-		<OrientationChaser DEF="OrCh1" duration="1"></PositionChaser>
+		<OrientationChaser DEF="OrCh1" duration="1"></OrientationChaser>
 		
 		<PositionInterpolator DEF="moving" 
 			key="0 0.125 0.25 0.375 0.5 0.625 0.75 0.875 1" 
@@ -243,7 +243,7 @@
 			key="0 0.25 0.5 0.75 1" 
 			keyValue="1 0 0 -1.57, 1 0 0 -0.57, 1 0 0 0, 1 0 0 0.57, 1 0 0 1.57"> 
 		</OrientationInterpolator> 
-		<OrientationChaser DEF="OrCh" duration="1" set_value = "1 0 0 -1.57"></PositionChaser>
+		<OrientationChaser DEF="OrCh" duration="1" set_value = "1 0 0 -1.57"></OrientationChaser>
 		
 		<Route fromNode="fish_time" fromField ="fraction_changed" toNode="fish_rotate" toField="set_fraction">
 		</Route>
